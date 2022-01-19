@@ -60,6 +60,7 @@ dependencies:
   #firebase
   firebase_core: any
   firebase_auth: any
+  cloud_firestore: any
   #google sign_in
   google_sign_in: any
   dartz: any

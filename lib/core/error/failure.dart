@@ -10,3 +10,9 @@ class NetworkFailure extends Failure {}
 class CachedFailure extends Failure {}
 
 class ServerFailure extends Failure {}
+
+class GeneralFailure extends Failure {}
+
+class AuthFailure extends Failure {}
+
+class NoUserFailure extends Failure {}

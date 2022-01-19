@@ -11,13 +11,12 @@ abstract class RecipeLocalDataSource {
   Future<TrendingRecipeResultModel> getLastTrendingRecipe();
 
   /// Get the cached [RecipesModel]
-  Future<RecipesModel> getLastRecipeDetails();
+  Future<RecipesModel?> getLastRecipeDetails();
 
   Future<void> cacheTrendingRecipe(
       TrendingRecipeResultModel trendingRecipeResultModel);
 
-  Future<void> cacheRecipeDetail(
-      TrendingRecipeResultModel trendingRecipeResultModel);
+  Future<void> cacheRecipeDetail(RecipesModel recipesModel);
 }
 
 class RecipeLocalDataSourceImpl implements RecipeLocalDataSource {
@@ -48,15 +47,19 @@ class RecipeLocalDataSourceImpl implements RecipeLocalDataSource {
   }
 
   @override
-  Future<void> cacheRecipeDetail(
-      TrendingRecipeResultModel trendingRecipeResultModel) {
-    // TODO: implement cacheRecipeDetail
-    throw UnimplementedError();
+  Future<void> cacheRecipeDetail(RecipesModel recipesModel) async {
+    await sharedPreferences.setString(
+        CACHED_RECIPE_DETAIL, jsonEncode(recipesModel));
   }
 
   @override
-  Future<RecipesModel> getLastRecipeDetails() {
-    // TODO: implement getLastRecipeDetails
-    throw UnimplementedError();
+  Future<RecipesModel?> getLastRecipeDetails() async {
+    final jsonString = sharedPreferences.getString(CACHED_RECIPE_DETAIL);
+
+    if (jsonString != null) {
+      return await Future.value(RecipesModel.fromJson(jsonDecode(jsonString)));
+    } else {
+      return null;
+    }
   }
 }

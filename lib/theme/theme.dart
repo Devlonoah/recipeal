@@ -64,9 +64,11 @@ final textTheme = TextTheme(
 );
 
 final lightTheme = ThemeData.light().copyWith(
-  primaryColor: Colors.black,
-  appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.white, foregroundColor: Colors.black),
-  textTheme: textTheme,
-);
+    primaryColor: Colors.black,
+    appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.white, foregroundColor: Colors.black),
+    textTheme: textTheme,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      selectedItemColor: Colors.pink,
+    ));
 final darkTheme = ThemeData.dark();

@@ -1,10 +1,16 @@
-class MetricModel {
+import 'package:recipeal/domain/entities/metric_entity.dart';
+
+class MetricModel extends MetricEntity {
   MetricModel({
     required this.amount,
     required this.unitLong,
     required this.unitShort,
-  });
-  late final int? amount;
+  }) : super(
+          amount: amount,
+          unitLong: unitLong,
+          unitShort: unitShort,
+        );
+  late final double? amount;
   late final String unitLong;
   late final String unitShort;
 

@@ -1,17 +1,22 @@
+import 'package:recipeal/domain/entities/measures_entity.dart';
+
 import 'metric_model.dart';
 import 'us_model.dart';
 
-class MeasuresModel {
+class MeasuresModel extends MeasuresEntity {
   MeasuresModel({
     required this.metric,
     required this.us,
-  });
-  late final MetricModel metric;
-  late final UsModel us;
+  }) : super(metric: metric, us: us);
+  final MetricModel metric;
+  final UsModel us;
 
-  MeasuresModel.fromJson(Map<String, dynamic> json) {
-    metric = MetricModel.fromJson(json['metric']);
-    us = UsModel.fromJson(json['us']);
+  factory MeasuresModel.fromJson(Map<String, dynamic> json) {
+    return MeasuresModel(
+        metric: MetricModel.fromJson(
+          json['metric'],
+        ),
+        us: UsModel.fromJson(json['us']));
   }
 
   Map<String, dynamic> toJson() {

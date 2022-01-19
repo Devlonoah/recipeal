@@ -1,3 +1,5 @@
+import 'package:recipeal/data/models/extending_ingredient_model.dart';
+
 import '../../domain/entities/recipe_entity.dart';
 
 class RecipesModel extends RecipesEntity {
@@ -33,10 +35,10 @@ class RecipesModel extends RecipesEntity {
     required this.vegetarian,
     required this.veryHealthy,
     required this.veryPopular,
-    required this.whole30,
+    // required this.whole30,
     required this.weightWatcherSmartPoints,
     required this.dishTypes,
-    // required this.extendedIngredients,
+    required this.extendedIngredients,
     required this.summary,
     // required this.winePairing,
   }) : super(
@@ -71,81 +73,82 @@ class RecipesModel extends RecipesEntity {
           vegetarian: vegetarian,
           veryHealthy: veryHealthy,
           veryPopular: veryPopular,
-          whole30: whole30,
+          // whole30: whole30,
+
           weightWatcherSmartPoints: weightWatcherSmartPoints,
           dishTypes: dishTypes,
-          // extendedIngredients: extendedIngredients,
+          extendedIngredients: extendedIngredients,
           summary: summary,
           // winePairing: winePairing,
         );
 
-  late final int id;
+  final int id;
 
-  late final String title;
-  late final String image;
-  late final String imageType;
-  late final int servings;
-  late final int readyInMinutes;
-  late final String license;
-  late final String sourceName;
-  late final String sourceUrl;
-  late final String spoonacularSourceUrl;
-  late final int aggregateLikes;
-  late final double healthScore;
-  late final double spoonacularScore;
+  final String title;
+  final String image;
+  final String imageType;
+  final int servings;
+  final int readyInMinutes;
+  final String license;
+  final String sourceName;
+  final String sourceUrl;
+  final String spoonacularSourceUrl;
+  final int aggregateLikes;
+  final double healthScore;
+  final double spoonacularScore;
 
-  late final double pricePerServing;
-  late final List<dynamic> analyzedInstructions;
-  late final bool cheap;
-  late final String creditsText;
-  late final List<dynamic> cuisines;
-  late final bool dairyFree;
-  late final List<dynamic> diets;
-  late final String gaps;
-  late final bool glutenFree;
-  late final String instructions;
-  late final bool ketogenic;
-  late final bool lowFodmap;
-  late final List<dynamic> occasions;
-  late final bool sustainable;
-  late final bool vegan;
-  late final bool vegetarian;
-  late final bool veryHealthy;
-  late final bool veryPopular;
-  late final bool whole30;
-  late final int weightWatcherSmartPoints;
-  late final List<String> dishTypes;
-  // late final List<ExtendedIngredientsModel> extendedIngredients;
-  late final String summary;
-  // late final WinePairingModel winePairing;
+  final double pricePerServing;
+  final List<dynamic> analyzedInstructions;
+  final bool cheap;
+  final String creditsText;
+  final List<dynamic> cuisines;
+  final bool dairyFree;
+  final List<dynamic> diets;
+  final String gaps;
+  final bool glutenFree;
+  final String instructions;
+  final bool ketogenic;
+  final bool lowFodmap;
+  final List<dynamic> occasions;
+  final bool sustainable;
+  final bool vegan;
+  final bool vegetarian;
+  final bool veryHealthy;
+  final bool veryPopular;
+  //  final bool whole30;
+  final int weightWatcherSmartPoints;
+  final List<String> dishTypes;
+  final List<ExtendedIngredientsModel> extendedIngredients;
+  final String summary;
+  //  final WinePairingModel winePairing;
 
   factory RecipesModel.fromJson(Map<String, dynamic> json) {
     return RecipesModel(
       id: json['id'],
-      title: json['title'],
-      image: json['image'],
-      imageType: json['imageType'],
-      servings: json['servings'],
-      readyInMinutes: json['readyInMinutes'],
-      license: json['license'],
-      sourceName: json['sourceName'],
-      sourceUrl: json['sourceUrl'],
+      title: json['title'] ?? "",
+      image: json['image'] ?? "",
+      imageType: json['imageType'] ?? "",
+      servings: json['servings'] ?? 0,
+      readyInMinutes: json['readyInMinutes'].toInt() ?? 0,
+      license: json['license'] ?? '',
+      sourceName: json['sourceName'] ?? "",
+      sourceUrl: json['sourceUrl'] ?? "",
       spoonacularSourceUrl: json['spoonacularSourceUrl'],
       aggregateLikes: json['aggregateLikes'],
-      healthScore: (json['healthScore']),
+      healthScore: (json['healthScore'])?.toDouble() ?? 0.0,
       spoonacularScore: json['spoonacularScore']?.toDouble() ?? 0.0,
       pricePerServing: json['pricePerServing']?.toDouble() ?? 0.0,
       analyzedInstructions:
           List.castFrom<dynamic, dynamic>(json['analyzedInstructions']),
       cheap: json['cheap'],
-      creditsText: json['creditsText'],
+      creditsText: json['creditsText'] ?? "",
       cuisines: List.castFrom<dynamic, dynamic>(json['cuisines']),
       dairyFree: json['dairyFree'],
       diets: List.castFrom<dynamic, dynamic>(json['diets']),
       gaps: json['gaps'],
       glutenFree: json['glutenFree'],
       instructions: json['instructions'],
-      ketogenic: json['ketogenic']?.toDouble() ?? 0.0,
+      ketogenic: json['ketogenic'] ?? false,
       lowFodmap: json['lowFodmap'],
       occasions: List.castFrom<dynamic, dynamic>(json['occasions']),
       sustainable: json['sustainable'],
@@ -153,12 +156,12 @@ class RecipesModel extends RecipesEntity {
       vegetarian: json['vegetarian'],
       veryHealthy: json['veryHealthy'],
       veryPopular: json['veryPopular'],
-      whole30: json['whole30'],
-      weightWatcherSmartPoints: json['weightWatcherSmartPoints'],
+
+      weightWatcherSmartPoints: json['weightWatcherSmartPoints']?.toInt() ?? 0,
       dishTypes: List.castFrom<dynamic, String>(json['dishTypes']),
-      // extendedIngredients = List.from(json['extendedIngredients'])
-      //     .map((e) => ExtendedIngredientsModel.fromJson(e))
-      //     .toList();
+      extendedIngredients: List.from(json['extendedIngredients'])
+          .map((e) => ExtendedIngredientsModel.fromJson(e))
+          .toList(),
       summary: json['summary'],
       // winePairing = WinePairingModel.fromJson(json['winePairing']);
     );
@@ -197,11 +200,11 @@ class RecipesModel extends RecipesEntity {
     _data['vegetarian'] = vegetarian;
     _data['veryHealthy'] = veryHealthy;
     _data['veryPopular'] = veryPopular;
-    _data['whole30'] = whole30;
+    // _data['whole30'] = whole30;
     _data['weightWatcherSmartPoints'] = weightWatcherSmartPoints;
     _data['dishTypes'] = dishTypes;
-    // _data['extendedIngredients'] =
-    //     extendedIngredients.map((e) => e.toJson()).toList();
+    _data['extendedIngredients'] =
+        extendedIngredients.map((e) => e.toJson()).toList();
     _data['summary'] = summary;
     // _data['winePairing'] = winePairing.toJson();
     return _data;

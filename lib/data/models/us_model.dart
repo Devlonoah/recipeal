@@ -1,15 +1,17 @@
-class UsModel {
+import 'package:recipeal/domain/entities/us_entity.dart';
+
+class UsModel extends UsEntity {
   UsModel({
     required this.amount,
     required this.unitLong,
     required this.unitShort,
-  });
-  late final int? amount;
+  }) : super(amount: amount, unitLong: unitLong, unitShort: unitShort);
+  late final double? amount;
   late final String unitLong;
   late final String unitShort;
 
   UsModel.fromJson(Map<String, dynamic> json) {
-    amount = json['amount'];
+    amount = json['amount']?.toDouble() ?? 0.0;
     unitLong = json['unitLong'];
     unitShort = json['unitShort'];
   }

@@ -5,5 +5,8 @@ class MeasuresEntity {
   final MetricEntity metric;
   final UsEntity us;
 
-  MeasuresEntity(this.metric, this.us);
+  MeasuresEntity({
+    required this.metric,
+    required this.us,
+  });
 }

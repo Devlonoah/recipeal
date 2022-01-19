@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:recipeal/data/models/recipe_instruction_model.dart';
+import 'package:recipeal/data/models/similar_recipe_model.dart';
 import '../../core/api_constants.dart';
 import '../../core/error/exception.dart';
 import '../models/recipe_model.dart';
@@ -12,8 +14,12 @@ abstract class RecipeRemoteDataSource {
 
   /// Get detailed information for the recipe
   ///
-  /// Throws [exception] for all server code
+  /// Throws [exception] for server -caused error [402  and others]
   Future<RecipesModel> getRecipeDetails(int id);
+
+  Future<RecipeInstructionModel> getRecipeInstruction(int id);
+
+  Future<List<SimilarRecipeModel>> getSimilarRecipe(int id);
 }
 
 class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
@@ -39,7 +45,7 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
   @override
   Future<TrendingRecipeResultModel> getTrendingRecipe() async {
     final _parsedUrl = Uri.parse(
-        "${ApiConstants.BASE_URL}/recipes/random?limitLicense=true&tags=rice&number=10");
+        "${ApiConstants.BASE_URL}/recipes/random?limitLicense=true&number=10&apiKey=${ApiConstants.API_KEY}");
 
     final response = await client.get(
       _parsedUrl,
@@ -47,10 +53,57 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
         'Content-Type': 'application/json',
       },
     );
+
     if (response.statusCode == 200) {
-      return TrendingRecipeResultModel.fromJson(jsonDecode(response.body));
-    } else {
+      final decodedResponse = jsonDecode(response.body);
+      return TrendingRecipeResultModel.fromJson(decodedResponse);
+    }
+
+    if (response.statusCode == 404) {
       throw ServerException();
+    } else {
+      throw GeneralException();
+    }
+  }
+
+  @override
+  Future<RecipeInstructionModel> getRecipeInstruction(int id) async {
+    final _header = {'Content-Type': 'application/json'};
+
+    final _parsedUrl = Uri.parse(
+        "${ApiConstants.BASE_URL}/recipes/$id/analyzedInstructions?stepBreakdown=false&apiKey=${ApiConstants.API_KEY}");
+
+    final result = await client.get(
+      _parsedUrl,
+      headers: _header,
+    );
+    if (result.statusCode == 200) {
+      return RecipeInstructionModel.fromJson(
+          Map.castFrom(jsonDecode(result.body)[0]));
+    } else {
+      throw GeneralException();
+    }
+  }
+
+  @override
+  Future<List<SimilarRecipeModel>> getSimilarRecipe(int id) async {
+    final _header = {'Content-Type': 'application/json'};
+
+    final _parsedUrl = Uri.parse(
+        "${ApiConstants.BASE_URL}/recipes/$id//similar?number=10&limitLicense=true&apiKey=${ApiConstants.API_KEY}");
+
+    final response = await client.get(_parsedUrl, headers: _header);
+
+    if (response.statusCode == 200) {
+      List<SimilarRecipeModel> list = <SimilarRecipeModel>[];
+      final cappedList = List.from(jsonDecode(response.body)).toList();
+
+      for (var element in cappedList) {
+        list.add(SimilarRecipeModel.fromMap(element));
+      }
+      return list;
+    } else {
+      throw GeneralException();
     }
   }
 }

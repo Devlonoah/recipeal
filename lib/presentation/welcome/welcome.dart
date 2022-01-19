@@ -1,7 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipeal/core/di/injection.dart';
 import 'package:recipeal/data/data_source/recipe_remote_data_source.dart';
+import 'package:recipeal/data/repository/firestore_repository_impl.dart';
+import 'package:recipeal/domain/repository/firestore_repository.dart';
+import 'package:recipeal/global_widget/reusable_button.dart';
+import 'package:recipeal/presentation/bloc/authentication/authentication_cubit.dart';
+import 'package:recipeal/presentation/tab_manager/tab_manager.dart';
+import 'package:recipeal/theme/dialogs.dart';
 import '../../constants/size.dart';
-import '../discover/discover.dart';
 import '../../spacing.dart';
 import '../../theme/colors.dart';
 import 'package:http/http.dart';
@@ -22,9 +31,6 @@ class WelcomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context).size.height;
-
-    RecipeRemoteDataSourceImpl recipeDataSource =
-        RecipeRemoteDataSourceImpl(client: Client());
 
     return Scaffold(
       body: Column(
@@ -54,15 +60,9 @@ class WelcomeBody extends StatelessWidget {
                     label: 'Get Started',
                     color: kkPink,
                     onTap: () async {
-                      try {
-                        final result =
-                            await recipeDataSource.getRecipeDetails(716429);
+                      //TODO: resolve back to navigate function
 
-                        print(result);
-                      } catch (e) {
-                        print("error: $e  ");
-                      }
-                      // return _navigateToDiscover(context);
+                      _navigateToDiscover(context);
                     },
                   ),
                 ),
@@ -107,99 +107,76 @@ class WelcomeBody extends StatelessWidget {
   }
 
   _navigateToDiscover(BuildContext context) =>
-      Navigator.pushNamed(context, DiscoverPage.id);
-}
-
-class ReusableButton extends StatelessWidget {
-  const ReusableButton({
-    Key? key,
-    required this.color,
-    required this.label,
-    required this.onTap,
-  }) : super(key: key);
-
-  final Color color;
-  final String label;
-
-  final void Function() onTap;
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: TextButton.styleFrom(
-        backgroundColor: color,
-        onSurface: kkSkyBlue,
-        shadowColor: kkBlack,
-      ),
-      onPressed: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15.0),
-        child: Text(
-          label,
-          style: Theme.of(context)
-              .textTheme
-              .button
-              ?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-      ),
-    );
-  }
+      Navigator.pushNamed(context, TabManager.id);
 }
 
 class _AuthMethodsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          addVerticalSpace(25),
-          Column(
-            children: [
-              Text(
-                'Welcome back!',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    ?.copyWith(color: kkBlack, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'Sign in to view your saved recipes',
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                      color: kkBlack,
-                      fontWeight: FontWeight.normal,
-                    ),
-              ),
-            ],
-          ),
-          addVerticalSpace(20),
-          ReusableButton(
-            color: kkSkyBlue,
-            label: 'Log in with Google',
-            onTap: () {
-              print('login in with Google');
-            },
-          ),
-          addVerticalSpace(20),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'By signing up, you are agreeing to our User Agreement.',
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.caption?.copyWith(
-                        color: kkFadeGrey,
+    return BlocListener<AuthenticationCubit, AuthenticationState>(
+      listener: (context, state) async {
+        if (state is AuthenticationFailure) {
+          showFailedAuthDialog(context);
+        }
+        if (state is AuthenticationSuccessful) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, TabManager.id, (route) => false);
+        }
+      },
+      child: Padding(
+        padding:
+            const EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            addVerticalSpace(25),
+            Column(
+              children: [
+                Text(
+                  'Welcome back!',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      ?.copyWith(color: kkBlack, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Sign in to view your saved recipes',
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        color: kkBlack,
                         fontWeight: FontWeight.normal,
                       ),
                 ),
-              )
-            ],
-          ),
-          addVerticalSpace(25),
-        ],
+              ],
+            ),
+            addVerticalSpace(20),
+            ReusableButton(
+              color: kkSkyBlue,
+              label: 'Log in with Google',
+              onTap: () {
+                BlocProvider.of<AuthenticationCubit>(context)
+                    .signInWithGoogle();
+              },
+            ),
+            addVerticalSpace(20),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'By signing up, you are agreeing to our User Agreement.',
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.caption?.copyWith(
+                          color: kkFadeGrey,
+                          fontWeight: FontWeight.normal,
+                        ),
+                  ),
+                )
+              ],
+            ),
+            addVerticalSpace(25),
+          ],
+        ),
       ),
     );
   }

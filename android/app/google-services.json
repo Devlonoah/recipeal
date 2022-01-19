@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "269643370926",
+    "firebase_url": "https://recipe-9acca-default-rtdb.firebaseio.com",
+    "project_id": "recipe-9acca",
+    "storage_bucket": "recipe-9acca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269643370926:android:520988f70142a9e7e1783f",
+        "android_client_info": {
+          "package_name": "com.choouse.recipeal.recipeal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269643370926-0nj6t3jeof0fclko01b50cpn63bfvcc8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEpuUb0uAtAHRfhzsdkZAOvshVl7eK7Gk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269643370926-0nj6t3jeof0fclko01b50cpn63bfvcc8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

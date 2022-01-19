@@ -1,8 +1,8 @@
-import 'package:equatable/equatable.dart';
-import 'extended_ingredient_entity.dart';
-import 'wine_pairing_entity.dart';
+import 'package:recipeal/data/models/recipe_model.dart';
 
-class RecipesEntity extends Equatable {
+import 'extended_ingredient_entity.dart';
+
+class RecipesEntity {
   RecipesEntity({
     required this.id,
     required this.title,
@@ -35,58 +35,50 @@ class RecipesEntity extends Equatable {
     required this.vegetarian,
     required this.veryHealthy,
     required this.veryPopular,
-    required this.whole30,
+    // required this.whole30,
     required this.weightWatcherSmartPoints,
     required this.dishTypes,
-    // required this.extendedIngredients,
+    required this.extendedIngredients,
     required this.summary,
     // required this.winePairing,
   });
 
-  int id;
-  String title;
-  String image;
-  String imageType;
-  int servings;
-  int readyInMinutes;
-  String license;
-  String sourceName;
-  String sourceUrl;
-  String spoonacularSourceUrl;
-  int aggregateLikes;
-  double healthScore;
-  double spoonacularScore;
-  double pricePerServing;
-  List<dynamic> analyzedInstructions;
-  bool cheap;
-  String creditsText;
-  List<dynamic> cuisines;
-  bool dairyFree;
-  List<dynamic> diets;
-  String gaps;
-  bool glutenFree;
-  String instructions;
-  bool ketogenic;
-  bool lowFodmap;
-  List<dynamic> occasions;
-  bool sustainable;
-  bool vegan;
-  bool vegetarian;
-  bool veryHealthy;
-  bool veryPopular;
-  bool whole30;
-  int weightWatcherSmartPoints;
-  List<String> dishTypes;
-  //  List<ExtendedIngredientsEntity> extendedIngredients;
-  String summary;
+  final int id;
+  final String title;
+  final String image;
+  final String imageType;
+  final int servings;
+  final int readyInMinutes;
+  final String license;
+  final String sourceName;
+  final String sourceUrl;
+  final String spoonacularSourceUrl;
+  final int aggregateLikes;
+  final double healthScore;
+  final double spoonacularScore;
+  final double pricePerServing;
+  final List<dynamic> analyzedInstructions;
+  final bool cheap;
+  final String creditsText;
+  final List<dynamic> cuisines;
+  final bool dairyFree;
+  final List<dynamic> diets;
+  final String gaps;
+  final bool glutenFree;
+  final String instructions;
+  final bool ketogenic;
+  final bool lowFodmap;
+  final List<dynamic> occasions;
+  final bool sustainable;
+  final bool vegan;
+  final bool vegetarian;
+  final bool veryHealthy;
+  final bool veryPopular;
+  //final  bool whole30;
+  final int weightWatcherSmartPoints;
+  final List<String> dishTypes;
+  final List<ExtendedIngredientsEntity> extendedIngredients;
+  final String summary;
   //  WinePairingEntity winePairing;
 
-  @override
-  List<Object?> get props => [
-        id,
-        title,
-      ];
-
-  @override
-  bool? get stringify => true;
 }

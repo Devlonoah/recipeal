@@ -1,5 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipeal/domain/entities/random_recipe_result_entity.dart';
+import 'package:recipeal/presentation/bloc/trending_recipe/trending_recipe_bloc.dart';
 import '../../constants/colors.dart';
 import '../../constants/size.dart';
 import '../recipe_info/recipe_info.dart';
@@ -29,7 +33,21 @@ class DiscoverPageBody extends StatelessWidget {
       children: [
         _buildCustomAppBarWithSearchBar(size),
         addVerticalSpace(20),
-        _TrendingHorizontalListView()
+        Expanded(
+          child: BlocBuilder<TrendingRecipeBloc, TrendingRecipeState>(
+              builder: (context, state) {
+            if (state is TrendingRecipeLoaded) {
+              return _TrendingHorizontalListView(state: state);
+            }
+
+            if (state is TrendingRecipeFailure) {
+              return const Center(child: Text("Error occured"));
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
+        ),
       ],
     );
   }
@@ -72,6 +90,12 @@ class DiscoverPageBody extends StatelessWidget {
 }
 
 class _TrendingHorizontalListView extends StatelessWidget {
+  final TrendingRecipeLoaded state;
+
+  const _TrendingHorizontalListView({
+    Key? key,
+    required this.state,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -89,42 +113,52 @@ class _TrendingHorizontalListView extends StatelessWidget {
           ),
         ),
         addVerticalSpace(10),
-        SizedBox(
-          height: 190,
-          width: double.infinity,
+        Expanded(
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.only(left: kDefaultHorizontalPadding),
-            itemCount: 10,
+            itemCount: state.trendingRecipeResult.recipes.length,
             itemBuilder: (context, index) {
+              final _recipe = state.trendingRecipeResult.recipes[index];
               return Padding(
                 padding: const EdgeInsets.only(right: 20),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, RecipeInfo.id,
-                        arguments: '8932');
+                        arguments: _recipe.id);
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: 125,
                     child: Column(
                       children: [
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Container(
-                              color: Colors.yellow,
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: Container(
+                            color: Colors.grey[300],
+                            child: CachedNetworkImage(
+                              imageUrl: _recipe.image,
+                              errorWidget: (context, url, error) => const Icon(
+                                Icons.image_not_supported,
+                                color: Colors.grey,
+                              ),
+                              fit: BoxFit.cover,
+                              height: 120,
+                              width: 125,
                             ),
                           ),
                         ),
                         addVerticalSpace(10),
-                        Text('The Best Chewy Chocolate Chip Cookies',
-                            textAlign: TextAlign.left,
-                            style:
-                                Theme.of(context).textTheme.subtitle2?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    // fontSize: 13,
-                                    height: 1.2))
+                        Expanded(
+                          child: Text(_recipe.title,
+                              textAlign: TextAlign.left,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.2)),
+                        )
                       ],
                     ),
                   ),

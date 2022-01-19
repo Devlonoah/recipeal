@@ -1,21 +1,23 @@
+import 'package:recipeal/data/models/extending_ingredient_model.dart';
+
 import 'measures_entity.dart';
 
 class ExtendedIngredientsEntity {
   ExtendedIngredientsEntity(
-      this.aisle,
-      this.amount,
-      this.consitency,
-      this.id,
-      this.image,
-      this.measures,
-      this.meta,
-      this.name,
-      this.original,
-      this.originalName,
-      this.unit);
+      {required this.aisle,
+      required this.amount,
+      required this.consitency,
+      required this.id,
+      required this.image,
+      required this.measures,
+      required this.meta,
+      required this.name,
+      required this.original,
+      required this.originalName,
+      required this.unit});
 
   final String aisle;
-  final int? amount;
+  final double? amount;
   final String consitency;
   final int id;
   final String image;

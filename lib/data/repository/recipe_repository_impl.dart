@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:recipeal/data/models/recipe_instruction_model.dart';
+import 'package:recipeal/domain/entities/similar_recipe_entity.dart';
+
 import '../../core/error/exception.dart';
 import '../data_source/recipe_local_data_source.dart';
 import '../data_source/recipe_remote_data_source.dart';
@@ -17,22 +20,40 @@ class RecipeRepositoryImpl implements RecipeRepository {
     required this.remoteDataSource,
     required this.localDataSource,
   });
+
   @override
   Future<Either<Failure, RecipesEntity>> getRecipeDetails(int id) async {
     try {
-      final remoteTrendingRecipe = await remoteDataSource.getRecipeDetails(id);
+      final _cachedResult = await _getCachedRecipeDetails(id);
 
-      return Right(remoteTrendingRecipe);
+      if (_cachedResult?.id != null) {
+        if (_cachedResult?.id == id) {
+          return Right(_cachedResult!);
+        } else {
+          return await getRecipeDetailFromApi(id);
+        }
+      } else {
+        return await getRecipeDetailFromApi(id);
+      }
     } on SocketException {
-      return await _getCachedRecipeDetails(id);
+      return Left(NetworkFailure());
     } on NetworkException {
-      return await _getCachedRecipeDetails(id);
+      return Left(NetworkFailure());
+    } catch (e) {
+      print('error is : $e');
+      return Left(GeneralFailure());
     }
+  }
+
+  Future<Right<Failure, RecipesEntity>> getRecipeDetailFromApi(int id) async {
+    final remoteTrendingRecipe = await remoteDataSource.getRecipeDetails(id);
+
+    await localDataSource.cacheRecipeDetail(remoteTrendingRecipe);
+    return Right(remoteTrendingRecipe);
   }
 
   @override
   Future<Either<Failure, TrendingRecipeResulEntity>> getTrendingRecipe() async {
-    // ignore: unused_local_variable
     try {
       final remoteTrendingRecipe = await remoteDataSource.getTrendingRecipe();
 
@@ -50,20 +71,49 @@ class RecipeRepositoryImpl implements RecipeRepository {
     }
   }
 
-  Future<Right<Failure, TrendingRecipeResulEntity>>
+  Future<Either<Failure, TrendingRecipeResulEntity>>
       _getCachedTrendingRecipe() async {
-    final localTrendingRecipe = await localDataSource.getLastTrendingRecipe();
+    try {
+      final localTrendingRecipe = await localDataSource.getLastTrendingRecipe();
 
-    return Right(localTrendingRecipe);
+      if (localTrendingRecipe != null) {
+        return Right(localTrendingRecipe);
+      } else {
+        return Left(CachedFailure());
+      }
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
   }
 
-  Future<Either<Failure, RecipesEntity>> _getCachedRecipeDetails(int id) async {
+  Future<RecipesEntity?> _getCachedRecipeDetails(int id) async {
     final localRecipeDetail = await localDataSource.getLastRecipeDetails();
 
-    if (localRecipeDetail != null) {
-      return Right(localRecipeDetail);
-    }
+    return localRecipeDetail;
+  }
 
-    return Left(CachedFailure());
+  @override
+  Future<Either<Failure, RecipeInstructionModel>> getRecipeInstruction(
+      int id) async {
+    try {
+      final result = await remoteDataSource.getRecipeInstruction(id);
+      return Right(result);
+    } on SocketException {
+      return Left(NetworkFailure());
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<SimilarRecipeEntity>>> getSimilarRecipe(
+      int id) async {
+    try {
+      final result = await remoteDataSource.getSimilarRecipe(id);
+
+      return Right(result);
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
   }
 }

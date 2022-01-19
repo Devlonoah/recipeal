@@ -1,6 +1,8 @@
+import 'package:recipeal/domain/entities/extended_ingredient_entity.dart';
+
 import 'measures_model.dart';
 
-class ExtendedIngredientsModel {
+class ExtendedIngredientsModel extends ExtendedIngredientsEntity {
   ExtendedIngredientsModel({
     required this.aisle,
     required this.amount,
@@ -13,9 +15,21 @@ class ExtendedIngredientsModel {
     required this.original,
     required this.originalName,
     required this.unit,
-  });
+  }) : super(
+          aisle: aisle,
+          amount: amount,
+          consitency: consitency,
+          id: id,
+          image: image,
+          measures: measures,
+          meta: meta,
+          name: name,
+          original: original,
+          originalName: originalName,
+          unit: unit,
+        );
   late final String aisle;
-  late final int? amount;
+  late final double? amount;
   late final String consitency;
   late final int id;
   late final String image;
@@ -26,18 +40,20 @@ class ExtendedIngredientsModel {
   late final String originalName;
   late final String unit;
 
-  ExtendedIngredientsModel.fromJson(Map<String, dynamic> json) {
-    aisle = json['aisle'];
-    amount = json['amount'];
-    consitency = json['consitency'];
-    id = json['id'];
-    image = json['image'];
-    measures = MeasuresModel.fromJson(json['measures']);
-    meta = List.castFrom<dynamic, String>(json['meta']);
-    name = json['name'];
-    original = json['original'];
-    originalName = json['originalName'];
-    unit = json['unit'];
+  factory ExtendedIngredientsModel.fromJson(Map<String, dynamic> json) {
+    return ExtendedIngredientsModel(
+      aisle: json['aisle'] ?? "",
+      amount: json['amount']?.toDouble() ?? 0.0,
+      consitency: json['consitency'] ?? "",
+      id: json['id'] ?? 0,
+      image: json['image'] ?? "",
+      measures: MeasuresModel.fromJson(json['measures']),
+      meta: List.castFrom<dynamic, String>(json['meta']),
+      name: json['name'],
+      original: json['original'],
+      originalName: json['originalName'],
+      unit: json['unit'],
+    );
   }
 
   Map<String, dynamic> toJson() {
