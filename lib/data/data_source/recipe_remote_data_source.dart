@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
+import 'package:recipeal/core/error/failure.dart';
 import 'package:recipeal/data/models/recipe_instruction_model.dart';
+import 'package:recipeal/data/models/recipe_search_result_model.dart';
 import 'package:recipeal/data/models/similar_recipe_model.dart';
 import '../../core/api_constants.dart';
 import '../../core/error/exception.dart';
@@ -20,6 +23,8 @@ abstract class RecipeRemoteDataSource {
   Future<RecipeInstructionModel> getRecipeInstruction(int id);
 
   Future<List<SimilarRecipeModel>> getSimilarRecipe(int id);
+
+  Future<RecipeSearchResultModel> searchRecipe(String queryValue);
 }
 
 class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
@@ -102,6 +107,21 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
         list.add(SimilarRecipeModel.fromMap(element));
       }
       return list;
+    } else {
+      throw GeneralException();
+    }
+  }
+
+  @override
+  Future<RecipeSearchResultModel> searchRecipe(String queryValue) async {
+    final _parsedUrl = Uri.parse(
+        "${ApiConstants.BASE_URL}/recipes/complexSearch?number=20&query=$queryValue&apiKey=${ApiConstants.API_KEY}");
+
+    final _response = await http.get(_parsedUrl);
+
+    if (_response.statusCode == 200) {
+      print(_response.body);
+      return RecipeSearchResultModel.fromJson(jsonDecode(_response.body));
     } else {
       throw GeneralException();
     }

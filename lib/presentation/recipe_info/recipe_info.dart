@@ -81,27 +81,19 @@ class RecipeInfoBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(
+          height: MediaQuery.of(context).padding.top,
+        ),
         const RecipeInfoAppBAr(),
-        Expanded(child: RecipeInfoMainView()),
+        const Expanded(child: RecipeInfoMainView()),
       ],
     );
-    // return BlocBuilder(
-    //     bloc: context.read<RecipeDetailsBloc>(),
-    //     builder: (context, state) {
-    //       if (state is RecipeDetailsFailure) {
-    //         return const Center(child: Icon(Icons.error));
-    //       }
-
-    //       if (state is RecipeDetailsLoaded) {
-    //         return _buildLoadedWidget(context, state);
-    //       }
-
-    //       return const Center(child: CircularProgressIndicator());
-    //     });
   }
 }
 
 class RecipeInfoMainView extends StatelessWidget {
+  const RecipeInfoMainView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeDetailsBloc, RecipeDetailsState>(
@@ -133,17 +125,19 @@ Widget _buildLoadedWidget(BuildContext context, RecipeDetailsLoaded state) {
         _buildRecipeImage(size: size, state: state),
         addVerticalSpace(15),
         const IngredientSection(),
-        addVerticalSpace(15),
-        Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
-          child: ReusableButton(
-            color: kkBlack,
-            label: 'Show Instruction',
-            onTap: () {},
-          ),
-        ),
-        addVerticalSpace(20),
+        addVerticalSpace(10),
+
+        //TODO:Future feature
+        // Padding(
+        //   padding:
+        //       const EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
+        //   child: ReusableButton(
+        //     color: kkBlack,
+        //     label: 'Show Instruction',
+        //     onTap: () {},
+        //   ),
+        // ), addVerticalSpace(20),
+
         // const SimilarRecipeSection()
       ],
     ),
@@ -246,11 +240,17 @@ Widget buildDishType(RecipeDetailsLoaded state) {
 Container _buildRecipeImage(
     {required Size size, required RecipeDetailsLoaded state}) {
   return Container(
-    color: Colors.yellow,
+    color: Colors.grey[300],
     height: size.height * 0.4,
+    width: double.infinity,
     child: CachedNetworkImage(
       imageUrl: state.recipesModel.image,
       fit: BoxFit.fitHeight,
+      errorWidget: (context, url, error) {
+        return const Center(
+          child: Icon(Icons.image_not_supported),
+        );
+      },
     ),
   );
 }

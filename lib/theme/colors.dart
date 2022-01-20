@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final Color kkPink = Colors.pink;
+final Color kkPink = Colors.deepOrange;
 final Color kkBlack = Colors.black;
 
 final Color kkDeepShyBlue = Color(0xFF1453E1);

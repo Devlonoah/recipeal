@@ -32,7 +32,6 @@ class LandingPageBody extends StatelessWidget {
         );
       }
       if (state is UserLoaded) {
-        print('userloaded');
         return const TabManager();
       }
       if (state is UserFailed) {

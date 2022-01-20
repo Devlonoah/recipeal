@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipeal/bloc_observer.dart';
 import 'package:recipeal/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:recipeal/presentation/bloc/favorite/favorite_bloc.dart';
+import 'package:recipeal/presentation/bloc/tab_manager/tabmanager_bloc.dart';
 import 'package:recipeal/presentation/bloc/trending_recipe/trending_recipe_bloc.dart';
 import 'package:recipeal/presentation/bloc/user/user_cubit.dart';
 import 'package:recipeal/presentation/landing_page/landing_page.dart';
@@ -17,6 +18,8 @@ import 'presentation/recipe_info/recipe_info.dart';
 import 'presentation/welcome/welcome.dart';
 
 import 'theme/theme.dart';
+
+import 'package:bloc/bloc.dart';
 
 void main() async {
   BlocOverrides.runZoned(
@@ -44,7 +47,8 @@ class MyApp extends StatelessWidget {
             lazy: false, create: (context) => getIt<AuthenticationCubit>()),
         BlocProvider(
           create: (context) => getIt<FavoriteBloc>(),
-        )
+        ),
+        BlocProvider(create: (context) => TabManagerBloc())
       ],
       child: BlocListener<AuthenticationCubit, AuthenticationState>(
         listener: (context, state) {

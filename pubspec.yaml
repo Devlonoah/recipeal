@@ -65,6 +65,8 @@ dependencies:
   google_sign_in: any
   dartz: any
   mockito: any
+  bloc: any
+  bloc_concurrency: any
   bloc_test: ^9.0.2
 
 dev_dependencies:

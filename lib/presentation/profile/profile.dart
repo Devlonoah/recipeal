@@ -48,32 +48,18 @@ class ProfileBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
       if (state is UserLoaded) {
-        return buildUserSignedIn(state);
+        return buildUserSignedIn(state, context: context);
       }
 
       return buildNotSignedInWidget(context);
     });
   }
 
-  Widget buildUserSignedIn(UserLoaded state) {
+  Widget buildUserSignedIn(UserLoaded state, {BuildContext? context}) {
     return Column(
       children: [
-        AppBar(
-          actions: [
-            IconButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {},
-              icon: Icon(
-                Icons.settings_outlined,
-                color: kkPink,
-                size: 30,
-              ),
-            ),
-          ],
-        ),
-        Expanded(
-          child: MainView(),
-        )
+        addVerticalSpace(MediaQuery.of(context!).padding.top),
+        Expanded(child: MainView())
       ],
     );
   }
@@ -97,12 +83,12 @@ class MainView extends StatelessWidget {
                     addVerticalSpace(20),
                     Center(
                       child: CircleAvatar(
-                        radius: 40,
+                        radius: 30,
                         backgroundImage:
                             CachedNetworkImageProvider(state.user.photoURL!),
                       ),
                     ),
-                    addVerticalSpace(20),
+                    addVerticalSpace(10),
                     Center(
                         child: Text(state.user.displayName!,
                             style: Theme.of(context)
@@ -152,7 +138,7 @@ class FavoriteWidget extends StatelessWidget {
       child:
           BlocBuilder<FavoriteBloc, FavoriteState>(builder: (context, state) {
         if (state.recipes.isEmpty) {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
 
         return Column(
@@ -168,43 +154,44 @@ class FavoriteWidget extends StatelessWidget {
                       ?.copyWith(fontWeight: FontWeight.bold, height: 1.2)),
             ),
             addVerticalSpace(10),
-            GridView.builder(
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: kDefaultHorizontalPadding),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, crossAxisSpacing: 20),
-                itemCount: state.recipes.length,
-                itemBuilder: (context, index) {
-                  final _favoriteRecipe = state.recipes[index];
+            Expanded(
+              child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: kDefaultHorizontalPadding),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, crossAxisSpacing: 20),
+                  itemCount: state.recipes.length,
+                  itemBuilder: (context, index) {
+                    final _favoriteRecipe = state.recipes[index];
 
-                  return GestureDetector(
-                    onTap: () => _navigateToRecipeInfo(context),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: CachedNetworkImage(
-                              imageUrl: _favoriteRecipe.image,
-                              fit: BoxFit.cover,
+                    return GestureDetector(
+                      onTap: () => _navigateToRecipeInfo(context),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: CachedNetworkImage(
+                                imageUrl: _favoriteRecipe.image,
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-                          addVerticalSpace(5),
-                          Text(
-                              _favoriteRecipe.title +
-                                  "diu skdjfhs sdjkfhsdk dfjkk skdjskd sdjk",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2
-                                  ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      height: 1.2)),
-                        ]),
-                  );
-                }),
+                            addVerticalSpace(5),
+                            Text(_favoriteRecipe.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        height: 1.2)),
+                          ]),
+                    );
+                  }),
+            ),
           ],
         );
       }),
@@ -224,18 +211,6 @@ Widget buildNotSignedInWidget(BuildContext context) {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {},
-              icon: Icon(
-                Icons.settings_outlined,
-                color: kkPink,
-                size: 30,
-              ),
-            ),
-          ),
           // Spacer(),
           Expanded(
             child: Column(

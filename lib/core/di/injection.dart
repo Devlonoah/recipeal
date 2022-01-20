@@ -11,10 +11,12 @@ import 'package:recipeal/domain/usecases/get_favorite_recipe.dart';
 import 'package:recipeal/domain/usecases/get_recipe_instruction.dart';
 import 'package:recipeal/domain/usecases/get_similar_recipe.dart';
 import 'package:recipeal/domain/usecases/get_user_usecase.dart';
+import 'package:recipeal/domain/usecases/search_recipe.dart';
 import 'package:recipeal/domain/usecases/sign_in_with_google.dart';
 import 'package:recipeal/domain/usecases/sign_out.dart';
 import 'package:recipeal/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:recipeal/presentation/bloc/favorite/favorite_bloc.dart';
+import 'package:recipeal/presentation/bloc/search/search_bloc.dart';
 import 'package:recipeal/presentation/bloc/user/user_cubit.dart';
 import '../../data/data_source/recipe_local_data_source.dart';
 import '../../data/data_source/recipe_remote_data_source.dart';
@@ -80,6 +82,9 @@ Future<void> initInjection() async {
   getIt.registerLazySingleton(() => AddToSaveFavoriteUsecase(getIt()));
 
   getIt.registerLazySingleton(() => GetFavoriteRecipeUsecase(getIt()));
+
+  getIt.registerLazySingleton(() => SearchRecipeUsecase(getIt()));
+
   //Trending-BLOC
   getIt.registerLazySingleton(() => TrendingRecipeBloc(getIt()));
 
@@ -93,4 +98,6 @@ Future<void> initInjection() async {
 
   getIt.registerFactory(() => FavoriteBloc(
       addToSaveFavoriteUsecase: getIt(), getFavoriteRecipeUsecase: getIt()));
+
+  getIt.registerFactory(() => SearchBloc(getIt()));
 }

@@ -27,9 +27,20 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
           image: event.recipesEntity.image));
 
       // print('crete/adding duccesfull: ${_eitherResult.isRight()}');
-      _eitherResult.fold((l) => emit(state.copyWith()), (r) {
-        emit(state);
-      });
+      _eitherResult.fold(
+        (l) => emit(state.copyWith()),
+        (r) {
+          final recipeToDb = FavoriteRecipeEntityForDb(
+              id: event.recipesEntity.id,
+              title: event.recipesEntity.title,
+              image: event.recipesEntity.image);
+
+          var newList = state.recipes;
+
+          newList.add(recipeToDb);
+          emit(state.copyWith(recipes: newList));
+        },
+      );
     });
     on<FavoriteFetched>((event, emit) async {
       print('fecth favorite event emmited');

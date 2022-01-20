@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recipeal/theme/colors.dart';
 
 final textTheme = TextTheme(
   headline1: GoogleFonts.rambla(
@@ -69,6 +70,6 @@ final lightTheme = ThemeData.light().copyWith(
         backgroundColor: Colors.white, foregroundColor: Colors.black),
     textTheme: textTheme,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      selectedItemColor: Colors.pink,
+      selectedItemColor: kkPink,
     ));
 final darkTheme = ThemeData.dark();

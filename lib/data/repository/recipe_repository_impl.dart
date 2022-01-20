@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:recipeal/data/models/recipe_instruction_model.dart';
+import 'package:recipeal/domain/entities/recipe_search_result_entity.dart';
 import 'package:recipeal/domain/entities/similar_recipe_entity.dart';
 
 import '../../core/error/exception.dart';
@@ -112,6 +113,17 @@ class RecipeRepositoryImpl implements RecipeRepository {
       final result = await remoteDataSource.getSimilarRecipe(id);
 
       return Right(result);
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, RecipeSearchResulEntity>> searchRecipe(
+      String queryValue) async {
+    try {
+      final response = await remoteDataSource.searchRecipe(queryValue);
+      return await Right(response);
     } catch (e) {
       return Left(GeneralFailure());
     }

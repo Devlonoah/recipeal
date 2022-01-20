@@ -1,11 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipeal/core/di/injection.dart';
-import 'package:recipeal/data/data_source/recipe_remote_data_source.dart';
-import 'package:recipeal/data/repository/firestore_repository_impl.dart';
-import 'package:recipeal/domain/repository/firestore_repository.dart';
 import 'package:recipeal/global_widget/reusable_button.dart';
 import 'package:recipeal/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:recipeal/presentation/tab_manager/tab_manager.dart';
@@ -13,7 +7,6 @@ import 'package:recipeal/theme/dialogs.dart';
 import '../../constants/size.dart';
 import '../../spacing.dart';
 import '../../theme/colors.dart';
-import 'package:http/http.dart';
 
 class Welcome extends StatelessWidget {
   static String id = 'Welcome';

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:recipeal/domain/entities/recipe_instruction_entity.dart';
+import 'package:recipeal/domain/entities/recipe_search_result_entity.dart';
 import 'package:recipeal/domain/entities/similar_recipe_entity.dart';
 
 import '../../core/error/failure.dart';
@@ -15,4 +16,7 @@ abstract class RecipeRepository {
   Future<Either<Failure, RecipeInstructionEntity>> getRecipeInstruction(int id);
 
   Future<Either<Failure, List<SimilarRecipeEntity>>> getSimilarRecipe(int id);
+
+  Future<Either<Failure, RecipeSearchResulEntity>> searchRecipe(
+      String queryValue);
 }
