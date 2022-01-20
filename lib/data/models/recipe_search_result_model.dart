@@ -1,5 +1,5 @@
-import 'package:recipeal/data/models/result_model.dart';
-import 'package:recipeal/domain/entities/recipe_search_result_entity.dart';
+import 'result_model.dart';
+import '../../domain/entities/recipe_search_result_entity.dart';
 
 class RecipeSearchResultModel extends RecipeSearchResulEntity {
   List<ResultsModel>? results;

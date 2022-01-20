@@ -2,16 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:recipeal/constants/size.dart';
-import 'package:recipeal/global_widget/reusable_button.dart';
-import 'package:recipeal/presentation/bloc/authentication/authentication_cubit.dart';
-import 'package:recipeal/presentation/bloc/favorite/favorite_bloc.dart';
-import 'package:recipeal/presentation/bloc/user/user_cubit.dart';
-import 'package:recipeal/presentation/recipe_info/recipe_info.dart';
-import 'package:recipeal/presentation/welcome/welcome.dart';
-import 'package:recipeal/spacing.dart';
-import 'package:recipeal/theme/colors.dart';
-import 'package:recipeal/theme/dialogs.dart';
+import '../../constants/size.dart';
+import '../../global_widget/reusable_button.dart';
+import '../bloc/authentication/authentication_cubit.dart';
+import '../bloc/favorite/favorite_bloc.dart';
+import '../bloc/user/user_cubit.dart';
+import '../recipe_info/recipe_info.dart';
+import '../welcome/welcome.dart';
+import '../../spacing.dart';
+import '../../theme/colors.dart';
+import '../../theme/dialogs.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);

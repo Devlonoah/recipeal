@@ -2,10 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:recipeal/domain/usecases/get_trending_recipe.dart';
+import '../../../domain/usecases/get_trending_recipe.dart';
 
-import 'package:recipeal/domain/usecases/sign_in_with_google.dart';
-import 'package:recipeal/domain/usecases/sign_out.dart';
+import '../../../domain/usecases/sign_in_with_google.dart';
+import '../../../domain/usecases/sign_out.dart';
 
 part 'authentication_state.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:recipeal/domain/entities/favorite_recipe_entity_for_db.dart';
+import '../../domain/entities/favorite_recipe_entity_for_db.dart';
 
 class FavoriteRecipeModelForDb extends FavoriteRecipeEntityForDb {
   final int id;

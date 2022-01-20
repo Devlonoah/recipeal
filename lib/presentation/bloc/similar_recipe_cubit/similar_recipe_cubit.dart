@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:recipeal/domain/entities/similar_recipe_entity.dart';
-import 'package:recipeal/domain/usecases/get_recipe_details.dart';
-import 'package:recipeal/domain/usecases/get_similar_recipe.dart';
+import '../../../domain/entities/similar_recipe_entity.dart';
+import '../../../domain/usecases/get_recipe_details.dart';
+import '../../../domain/usecases/get_similar_recipe.dart';
 
 part 'similar_recipe_state.dart';
 

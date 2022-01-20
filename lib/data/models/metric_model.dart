@@ -1,4 +1,4 @@
-import 'package:recipeal/domain/entities/metric_entity.dart';
+import '../../domain/entities/metric_entity.dart';
 
 class MetricModel extends MetricEntity {
   MetricModel({

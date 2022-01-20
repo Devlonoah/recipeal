@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:recipeal/domain/entities/recipe_instruction_entity.dart';
-import 'package:recipeal/domain/usecases/get_recipe_details.dart';
-import 'package:recipeal/domain/usecases/get_recipe_instruction.dart';
+import '../../../domain/entities/recipe_instruction_entity.dart';
+import '../../../domain/usecases/get_recipe_details.dart';
+import '../../../domain/usecases/get_recipe_instruction.dart';
 
 part 'recipe_instruction_event.dart';
 part 'recipe_instruction_state.dart';

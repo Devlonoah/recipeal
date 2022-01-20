@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipeal/constants/size.dart';
-import 'package:recipeal/presentation/bloc/similar_recipe_cubit/similar_recipe_cubit.dart';
+import '../../../constants/size.dart';
+import '../../bloc/similar_recipe_cubit/similar_recipe_cubit.dart';
 
 import '../../../spacing.dart';
 

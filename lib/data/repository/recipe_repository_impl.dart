@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:recipeal/data/models/recipe_instruction_model.dart';
-import 'package:recipeal/domain/entities/recipe_search_result_entity.dart';
-import 'package:recipeal/domain/entities/similar_recipe_entity.dart';
+import '../models/recipe_instruction_model.dart';
+import '../../domain/entities/recipe_search_result_entity.dart';
+import '../../domain/entities/similar_recipe_entity.dart';
 
 import '../../core/error/exception.dart';
 import '../data_source/recipe_local_data_source.dart';
@@ -41,7 +41,6 @@ class RecipeRepositoryImpl implements RecipeRepository {
     } on NetworkException {
       return Left(NetworkFailure());
     } catch (e) {
-      print('error is : $e');
       return Left(GeneralFailure());
     }
   }
@@ -124,6 +123,17 @@ class RecipeRepositoryImpl implements RecipeRepository {
     try {
       final response = await remoteDataSource.searchRecipe(queryValue);
       return await Right(response);
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, TrendingRecipeResulEntity>>
+      getRecommendedRecipes() async {
+    try {
+      final result = await remoteDataSource.getRecommendedRecipes();
+      return Right(result);
     } catch (e) {
       return Left(GeneralFailure());
     }

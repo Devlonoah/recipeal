@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:recipeal/core/error/failure.dart';
-import 'package:recipeal/data/models/favorite_recipe_model_for_db.dart';
-import 'package:recipeal/domain/repository/firestore_repository.dart';
+import '../../core/error/failure.dart';
+import '../models/favorite_recipe_model_for_db.dart';
+import '../../domain/repository/firestore_repository.dart';
 
 class FirestoreRepositoryImpl implements FirestoreRepository {
   final FirebaseFirestore firebaseFirestore;
@@ -41,7 +41,6 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
         return Left(AuthFailure());
       }
     } catch (e) {
-      print('exception thrwon :$e');
       return Left(GeneralFailure());
     }
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipeal/constants/size.dart';
-import 'package:recipeal/presentation/bloc/favorite/favorite_bloc.dart';
-import 'package:recipeal/presentation/bloc/recipe_details/recipe_details_bloc.dart';
-import 'package:recipeal/theme/colors.dart';
+import '../../../constants/size.dart';
+import '../../bloc/favorite/favorite_bloc.dart';
+import '../../bloc/recipe_details/recipe_details_bloc.dart';
+import '../../../theme/colors.dart';
 
 class RecipeInfoAppBAr extends StatelessWidget {
   const RecipeInfoAppBAr({Key? key}) : super(key: key);

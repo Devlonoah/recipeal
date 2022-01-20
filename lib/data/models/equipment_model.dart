@@ -1,5 +1,5 @@
-import 'package:recipeal/data/models/temperature_model.dart';
-import 'package:recipeal/domain/entities/equipment_entity.dart';
+import 'temperature_model.dart';
+import '../../domain/entities/equipment_entity.dart';
 
 class EquipmentModel extends EquipmentEntity {
   int? id;

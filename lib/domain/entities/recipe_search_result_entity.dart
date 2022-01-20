@@ -1,4 +1,4 @@
-import 'package:recipeal/domain/entities/result_entity.dart';
+import 'result_entity.dart';
 
 class RecipeSearchResulEntity {
   final List<ResultsEntity>? results;

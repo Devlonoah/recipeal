@@ -1,4 +1,4 @@
-import 'package:recipeal/domain/entities/recipe_instruction_step_entity.dart';
+import 'recipe_instruction_step_entity.dart';
 
 class RecipeInstructionEntity {
   final String? name;

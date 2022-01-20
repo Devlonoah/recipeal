@@ -1,5 +1,5 @@
-import 'package:recipeal/data/models/recipe_instruction_step_model.dart';
-import 'package:recipeal/domain/entities/recipe_instruction_entity.dart';
+import 'recipe_instruction_step_model.dart';
+import '../../domain/entities/recipe_instruction_entity.dart';
 
 class RecipeInstructionModel extends RecipeInstructionEntity {
   String? name;

@@ -1,7 +1,7 @@
-import 'package:recipeal/core/error/failure.dart';
+import '../../core/error/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:recipeal/core/usecases/base_usecase.dart';
-import 'package:recipeal/domain/repository/firestore_repository.dart';
+import '../../core/usecases/base_usecase.dart';
+import '../repository/firestore_repository.dart';
 
 class AddToSaveFavoriteUsecase implements BaseUsecase<void, RecipeParams> {
   final FirestoreRepository repository;

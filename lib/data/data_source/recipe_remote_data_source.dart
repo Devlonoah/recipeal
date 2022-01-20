@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:recipeal/core/error/failure.dart';
-import 'package:recipeal/data/models/recipe_instruction_model.dart';
-import 'package:recipeal/data/models/recipe_search_result_model.dart';
-import 'package:recipeal/data/models/similar_recipe_model.dart';
+import '../../core/error/failure.dart';
+import '../models/recipe_instruction_model.dart';
+import '../models/recipe_search_result_model.dart';
+import '../models/similar_recipe_model.dart';
 import '../../core/api_constants.dart';
 import '../../core/error/exception.dart';
 import '../models/recipe_model.dart';
@@ -25,6 +25,8 @@ abstract class RecipeRemoteDataSource {
   Future<List<SimilarRecipeModel>> getSimilarRecipe(int id);
 
   Future<RecipeSearchResultModel> searchRecipe(String queryValue);
+
+  Future<TrendingRecipeResultModel> getRecommendedRecipes();
 }
 
 class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
@@ -120,8 +122,31 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
     final _response = await http.get(_parsedUrl);
 
     if (_response.statusCode == 200) {
-      print(_response.body);
       return RecipeSearchResultModel.fromJson(jsonDecode(_response.body));
+    } else {
+      throw GeneralException();
+    }
+  }
+
+  @override
+  Future<TrendingRecipeResultModel> getRecommendedRecipes() async {
+    final _parsedUrl = Uri.parse(
+        "${ApiConstants.BASE_URL}/recipes/random?limitLicense=true&number=10&apiKey=${ApiConstants.API_KEY}");
+
+    final response = await client.get(
+      _parsedUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final decodedResponse = jsonDecode(response.body);
+      return TrendingRecipeResultModel.fromJson(decodedResponse);
+    }
+
+    if (response.statusCode == 404) {
+      throw ServerException();
     } else {
       throw GeneralException();
     }

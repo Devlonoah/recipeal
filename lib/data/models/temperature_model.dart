@@ -1,4 +1,4 @@
-import 'package:recipeal/domain/entities/temperature_entity.dart';
+import '../../domain/entities/temperature_entity.dart';
 
 class TemperatureModel extends TemperatureEntity {
   double? number;

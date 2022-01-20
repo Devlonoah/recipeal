@@ -1,4 +1,4 @@
-import 'package:recipeal/data/models/extending_ingredient_model.dart';
+import '../../data/models/extending_ingredient_model.dart';
 
 import 'measures_entity.dart';
 

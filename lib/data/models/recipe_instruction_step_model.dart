@@ -1,7 +1,7 @@
-import 'package:recipeal/data/models/equipment_model.dart';
-import 'package:recipeal/data/models/ingredient_model.dart';
-import 'package:recipeal/data/models/temperature_model.dart';
-import 'package:recipeal/domain/entities/recipe_instruction_step_entity.dart';
+import 'equipment_model.dart';
+import 'ingredient_model.dart';
+import 'temperature_model.dart';
+import '../../domain/entities/recipe_instruction_step_entity.dart';
 
 class RecipeInstructionStepModel extends RecipeInstructionStepEntity {
   int? number;

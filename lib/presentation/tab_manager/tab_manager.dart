@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipeal/presentation/bloc/tab_manager/tabmanager_bloc.dart';
-import 'package:recipeal/presentation/bloc/trending_recipe/trending_recipe_bloc.dart';
-import 'package:recipeal/presentation/discover/discover.dart';
-import 'package:recipeal/presentation/profile/profile.dart';
-import 'package:recipeal/presentation/search/search.dart';
-import 'package:recipeal/theme/colors.dart';
+
+import '../../theme/colors.dart';
+import '../bloc/recommended_recipe/recommended_recipe_bloc.dart';
+import '../bloc/tab_manager/tabmanager_bloc.dart';
+import '../bloc/trending_recipe/trending_recipe_bloc.dart';
+import '../discover/discover.dart';
+import '../profile/profile.dart';
+import '../search/search.dart';
 
 class TabManager extends StatefulWidget {
   static String id = 'TabManager';
@@ -21,6 +23,8 @@ class _TabManagerState extends State<TabManager> {
     super.initState();
 
     BlocProvider.of<TrendingRecipeBloc>(context).add(GetTrendingRecipe());
+    BlocProvider.of<RecommendedRecipeBloc>(context)
+        .add(const RecommendedRecipeEvent());
   }
 
   @override
@@ -30,7 +34,11 @@ class _TabManagerState extends State<TabManager> {
         return Scaffold(
             body: IndexedStack(
               index: state.index,
-              children: const [DiscoverPage(), SearchPage(), Profile()],
+              children: const [
+                DiscoverPage(),
+                SearchPage(),
+                Profile(),
+              ],
             ),
             bottomNavigationBar: BottomNavigationBar(
               selectedItemColor: kkPink,

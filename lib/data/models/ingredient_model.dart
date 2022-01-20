@@ -1,4 +1,4 @@
-import 'package:recipeal/domain/entities/ingredient_entity.dart';
+import '../../domain/entities/ingredient_entity.dart';
 
 class IngredientsModel extends IngredientsEntity {
   int? id;

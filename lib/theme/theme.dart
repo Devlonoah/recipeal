@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:recipeal/theme/colors.dart';
+import 'colors.dart';
 
 final textTheme = TextTheme(
   headline1: GoogleFonts.rambla(

@@ -1,4 +1,4 @@
-import 'package:recipeal/domain/entities/temperature_entity.dart';
+import 'temperature_entity.dart';
 
 class EquipmentEntity {
   final int? id;

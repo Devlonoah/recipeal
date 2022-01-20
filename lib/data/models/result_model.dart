@@ -1,4 +1,4 @@
-import 'package:recipeal/domain/entities/result_entity.dart';
+import '../../domain/entities/result_entity.dart';
 
 class ResultsModel extends ResultsEntity {
   int? id;

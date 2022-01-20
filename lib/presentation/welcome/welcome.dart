@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipeal/global_widget/reusable_button.dart';
-import 'package:recipeal/presentation/bloc/authentication/authentication_cubit.dart';
-import 'package:recipeal/presentation/tab_manager/tab_manager.dart';
-import 'package:recipeal/theme/dialogs.dart';
+import '../../global_widget/reusable_button.dart';
+import '../bloc/authentication/authentication_cubit.dart';
+import '../tab_manager/tab_manager.dart';
+import '../../theme/dialogs.dart';
 import '../../constants/size.dart';
 import '../../spacing.dart';
 import '../../theme/colors.dart';

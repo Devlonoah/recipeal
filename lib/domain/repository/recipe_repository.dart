@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:recipeal/domain/entities/recipe_instruction_entity.dart';
-import 'package:recipeal/domain/entities/recipe_search_result_entity.dart';
-import 'package:recipeal/domain/entities/similar_recipe_entity.dart';
+import '../entities/recipe_instruction_entity.dart';
+import '../entities/recipe_search_result_entity.dart';
+import '../entities/similar_recipe_entity.dart';
 
 import '../../core/error/failure.dart';
 import '../entities/random_recipe_result_entity.dart';
@@ -19,4 +19,6 @@ abstract class RecipeRepository {
 
   Future<Either<Failure, RecipeSearchResulEntity>> searchRecipe(
       String queryValue);
+
+  Future<Either<Failure, TrendingRecipeResulEntity>> getRecommendedRecipes();
 }

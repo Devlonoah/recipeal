@@ -1,4 +1,4 @@
-import 'package:recipeal/domain/entities/measures_entity.dart';
+import '../../domain/entities/measures_entity.dart';
 
 import 'metric_model.dart';
 import 'us_model.dart';

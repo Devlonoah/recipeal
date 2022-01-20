@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipeal/constants/size.dart';
-import 'package:recipeal/core/di/injection.dart';
-import 'package:recipeal/presentation/bloc/search/search_bloc.dart';
-import 'package:recipeal/spacing.dart';
+import '../../constants/size.dart';
+import '../../core/di/injection.dart';
+import '../bloc/search/search_bloc.dart';
+import '../recipe_info/recipe_info.dart';
+import '../../spacing.dart';
 
 class SearchPage extends StatelessWidget {
   static String id = "SearchPage";
@@ -52,7 +53,13 @@ class SearchPageBody extends StatelessWidget {
       }
 
       if (state is SearchFailure) {
-        return const Center(child: Text('Failed try again'));
+        return Center(
+            child: Image.asset(
+          'assets/search_icon.png',
+          fit: BoxFit.cover,
+          height: 150,
+          width: 150,
+        ));
       }
 
       return _searchLoadingWidget();
@@ -74,22 +81,28 @@ class SearchPageBody extends StatelessWidget {
         itemCount: resultstate.result.results?.length,
         itemBuilder: (context, index) {
           final _result = resultstate.result.results?[index];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                  child: CachedNetworkImage(
-                imageUrl: _result!.image!,
-                fit: BoxFit.cover,
-              )),
-              Text(_result.title!,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle2
-                      ?.copyWith(fontWeight: FontWeight.bold, height: 1.2)),
-            ],
+          return GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, RecipeInfo.id,
+                  arguments: _result?.id);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: CachedNetworkImage(
+                  imageUrl: _result!.image!,
+                  fit: BoxFit.cover,
+                )),
+                Text(_result.title!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle2
+                        ?.copyWith(fontWeight: FontWeight.bold, height: 1.2)),
+              ],
+            ),
           );
         },
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -127,7 +140,7 @@ class _SearchBarState extends State<SearchBar> {
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.grey[200],
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     bottomLeft: Radius.circular(10))),
 

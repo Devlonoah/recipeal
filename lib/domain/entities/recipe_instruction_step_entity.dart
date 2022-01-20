@@ -1,6 +1,6 @@
-import 'package:recipeal/domain/entities/equipment_entity.dart';
-import 'package:recipeal/domain/entities/ingredient_entity.dart';
-import 'package:recipeal/domain/entities/temperature_entity.dart';
+import 'equipment_entity.dart';
+import 'ingredient_entity.dart';
+import 'temperature_entity.dart';
 
 class RecipeInstructionStepEntity {
   int? number;

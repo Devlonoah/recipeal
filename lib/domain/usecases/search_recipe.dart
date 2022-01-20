@@ -1,10 +1,10 @@
-import 'package:recipeal/core/error/failure.dart';
+import '../../core/error/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:recipeal/core/usecases/base_usecase.dart';
-import 'package:recipeal/data/repository/recipe_repository_impl.dart';
-import 'package:recipeal/domain/entities/recipe_search_result_entity.dart';
-import 'package:recipeal/domain/repository/recipe_repository.dart';
-import 'package:recipeal/domain/usecases/get_recipe_details.dart';
+import '../../core/usecases/base_usecase.dart';
+import '../../data/repository/recipe_repository_impl.dart';
+import '../entities/recipe_search_result_entity.dart';
+import '../repository/recipe_repository.dart';
+import 'get_recipe_details.dart';
 
 class SearchRecipeUsecase
     extends BaseUsecase<RecipeSearchResulEntity, SearchParams> {

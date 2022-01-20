@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:recipeal/data/models/recipe_model.dart';
-import 'package:recipeal/domain/entities/recipe_entity.dart';
+import '../../../data/models/recipe_model.dart';
+import '../../../domain/entities/recipe_entity.dart';
 import '../../../domain/usecases/get_recipe_details.dart';
 
 part 'recipe_details_event.dart';

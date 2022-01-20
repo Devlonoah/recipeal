@@ -1,4 +1,4 @@
-import 'package:recipeal/domain/entities/us_entity.dart';
+import '../../domain/entities/us_entity.dart';
 
 class UsModel extends UsEntity {
   UsModel({
