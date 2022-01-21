@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import '../../constants/size.dart';
 import '../../global_widget/reusable_button.dart';
 import '../bloc/authentication/authentication_cubit.dart';

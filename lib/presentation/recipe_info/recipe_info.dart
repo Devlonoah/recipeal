@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:recipeal/presentation/web_view/web_view.dart';
 import '../../core/di/injection.dart';
 import '../../domain/usecases/get_recipe_details.dart';
@@ -61,12 +62,7 @@ class _RecipeInfoState extends State<RecipeInfo> {
       child: Scaffold(
         body: BlocListener<RecipeDetailsBloc, RecipeDetailsState>(
           listener: (context, state) {
-            if (state is RecipeDetailsLoaded) {
-              //TODO:Reactivate the function
-              // context
-              //     .read<SimilarRecipeCubit>()
-              //     .getSimilarRecipe(state.recipesModel.id);
-            }
+            if (state is RecipeDetailsLoaded) {}
           },
           child: const RecipeInfoBody(),
         ),
@@ -100,8 +96,6 @@ class RecipeInfoMainView extends StatelessWidget {
     return BlocBuilder<RecipeDetailsBloc, RecipeDetailsState>(
         builder: (context, state) {
       if (state is RecipeDetailsLoaded) {
-        print(
-            "analyzed instruction: ${state.recipesModel.analyzedInstructions}");
         return _buildLoadedWidget(context, state);
       }
 
@@ -109,8 +103,10 @@ class RecipeInfoMainView extends StatelessWidget {
         return const Center(child: Icon(Icons.error, color: Colors.black));
       }
 
-      return const Center(
-        child: CircularProgressIndicator(),
+      return Center(
+        child: SpinKitFadingCircle(
+          color: kkPink,
+        ),
       );
     });
   }
@@ -126,14 +122,18 @@ Widget _buildLoadedWidget(BuildContext context, RecipeDetailsLoaded state) {
         _buildTitileAndDishType(state: state, context: context),
         addVerticalSpace(10),
         _buildRecipeImage(size: size, state: state),
-        addVerticalSpace(10),
-        ReusableButton(
-          color: kkPink,
-          label: 'View Instruction',
-          onTap: () {
-            _navigateToWebView(
-                context, state.recipesModel.spoonacularSourceUrl);
-          },
+        addVerticalSpace(20),
+        Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
+          child: ReusableButton(
+            color: kkPink,
+            label: 'View Instruction',
+            onTap: () {
+              _navigateToWebView(
+                  context, state.recipesModel.spoonacularSourceUrl);
+            },
+          ),
         ),
         addVerticalSpace(15),
         const IngredientSection(),

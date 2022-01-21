@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:recipeal/global_widget/loading_widget.dart';
 import 'package:recipeal/presentation/discover/widgets/recommended_gridview.dart';
 import '../../domain/entities/favorite_recipe_entity_for_db.dart';
 import '../bloc/favorite/favorite_bloc.dart';
@@ -20,83 +22,75 @@ class DiscoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: SafeArea(
-        child: DiscoverPageBody(),
-      ),
-    );
+        body: SafeArea(
+      child: DiscoverPageBody2(),
+    ));
   }
 }
 
-class DiscoverPageBody extends StatelessWidget {
-  const DiscoverPageBody({Key? key}) : super(key: key);
+class DiscoverPageBody2 extends StatelessWidget {
+  const DiscoverPageBody2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: SizedBox(
-        height: size.height,
-        child: Column(
-          children: [
-            _buildDummySearchBar(size, context: context),
-            addVerticalSpace(20),
-            Expanded(
-              child: BlocBuilder<TrendingRecipeBloc, TrendingRecipeState>(
-                  builder: (context, state) {
-                if (state is TrendingRecipeLoaded) {
-                  return _TrendingHorizontalListView(state: state);
-                }
-
-                if (state is TrendingRecipeFailure) {
-                  return const Center(child: Text("Error occured"));
-                }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }),
-            ),
-            // FavoriteWidget(),
-
-            //recommended recipes
-
-            const Expanded(child: RecommendedRecipes())
-          ],
+    return CustomScrollView(
+      slivers: [
+        // Dummy search bar
+        SliverToBoxAdapter(
+          child: _buildDummySearchBar(size, context: context),
         ),
-      ),
+
+        //
+        const SliverToBoxAdapter(
+          // Trending recipe
+          child: _TrendingHorizontalListView(),
+        ),
+
+        const SliverPadding(padding: EdgeInsets.symmetric(vertical: 15)),
+        // Recommended recipes
+        const SliverToBoxAdapter(
+          child: RecommendedGridView(),
+        ),
+
+        //FavoriteWidget
+        const SliverToBoxAdapter(
+          child: FavoriteWidget(),
+        )
+      ],
     );
   }
+}
 
-  _buildDummySearchBar(Size size, {BuildContext? context}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: xyzz,
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 4,
-              offset: const Offset(0, 2.5)),
-        ],
-      ),
-      child: GestureDetector(
-        onTap: () => BlocProvider.of<TabManagerBloc>(context!)
-            .add(const TabmanagerEvent(index: 1)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: kDefaultHorizontalPadding, vertical: 10),
-          child: Container(
-            height: size.height * 0.06,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.4),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: const Center(child: Text('Search yummy recipe')),
+_buildDummySearchBar(Size size, {BuildContext? context}) {
+  return Container(
+    decoration: BoxDecoration(
+      color: xyzz,
+      boxShadow: [
+        BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 4,
+            offset: const Offset(0, 2.5)),
+      ],
+    ),
+    child: GestureDetector(
+      onTap: () => BlocProvider.of<TabManagerBloc>(context!)
+          .add(const TabmanagerEvent(index: 1)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: kDefaultHorizontalPadding, vertical: 10),
+        child: Container(
+          height: size.height * 0.06,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.4),
+            borderRadius: BorderRadius.circular(30),
           ),
+          child: const Center(child: Text('Search yummy recipe')),
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 class RecommendedRecipes extends StatelessWidget {
@@ -107,11 +101,11 @@ class RecommendedRecipes extends StatelessWidget {
     return BlocBuilder<RecommendedRecipeBloc, RecommendedRecipeState>(
         builder: (context, state) {
       if (state is RecommendedRecipeLoaded) {
-        return RecommendedGridView(state: state);
+        return const RecommendedGridView();
       }
 
       if (state is RecommendedRecipeFailure) {
-        return const Center(child: Text("Error occured"));
+        return const Center(child: Text("Error occurred"));
       }
       return const Center(
         child: CircularProgressIndicator(),
@@ -121,85 +115,99 @@ class RecommendedRecipes extends StatelessWidget {
 }
 
 class _TrendingHorizontalListView extends StatelessWidget {
-  final TrendingRecipeLoaded state;
-
   const _TrendingHorizontalListView({
     Key? key,
-    required this.state,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
-          child: Text(
-            'Trending',
-            style: Theme.of(context)
-                .textTheme
-                .headline6
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-        ),
-        addVerticalSpace(10),
-        Expanded(
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.only(left: kDefaultHorizontalPadding),
-            itemCount: state.trendingRecipeResult.recipes.length,
-            itemBuilder: (context, index) {
-              final _recipe = state.trendingRecipeResult.recipes[index];
-              return Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, RecipeInfo.id,
-                        arguments: _recipe.id);
-                  },
-                  child: SizedBox(
-                    width: 125,
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Container(
-                            color: Colors.grey[300],
-                            child: CachedNetworkImage(
-                              imageUrl: _recipe.image,
-                              errorWidget: (context, url, error) => const Icon(
-                                Icons.image_not_supported,
-                                color: Colors.grey,
+    return BlocBuilder<TrendingRecipeBloc, TrendingRecipeState>(
+        builder: (context, state) {
+      if (state is TrendingRecipeFailure) {
+        return const Center(
+          child: Text('Error occured'),
+        );
+      }
+
+      if (state is TrendingRecipeLoaded) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            addVerticalSpace(20),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: kDefaultHorizontalPadding),
+              child: Text(
+                'Trending',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+            addVerticalSpace(10),
+            SizedBox(
+              height: 200,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.only(left: kDefaultHorizontalPadding),
+                itemCount: state.trendingRecipeResult.recipes.length,
+                itemBuilder: (context, index) {
+                  final _recipe = state.trendingRecipeResult.recipes[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, RecipeInfo.id,
+                            arguments: _recipe.id);
+                      },
+                      child: SizedBox(
+                        width: 125,
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Container(
+                                color: Colors.grey[300],
+                                child: CachedNetworkImage(
+                                  imageUrl: _recipe.image,
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(
+                                    Icons.image_not_supported,
+                                    color: Colors.grey,
+                                  ),
+                                  fit: BoxFit.cover,
+                                  height: 120,
+                                  width: 125,
+                                ),
                               ),
-                              fit: BoxFit.cover,
-                              height: 120,
-                              width: 125,
                             ),
-                          ),
+                            addVerticalSpace(10),
+                            Expanded(
+                              child: Text(_recipe.title,
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2
+                                      ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          height: 1.2)),
+                            )
+                          ],
                         ),
-                        addVerticalSpace(10),
-                        Expanded(
-                          child: Text(_recipe.title,
-                              textAlign: TextAlign.left,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2
-                                  ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      height: 1.2)),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              );
-            },
-          ),
-        )
-      ],
-    );
+                  );
+                },
+              ),
+            )
+          ],
+        );
+      }
+
+      return LoadingWidget();
+    });
   }
 }
 
