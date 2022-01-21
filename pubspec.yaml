@@ -52,11 +52,13 @@ dependencies:
 
   #local storage
   shared_preferences: ^2.0.12
-  
+
+  #webview
+  flutter_webview_plugin: any
   #fots_indicator
-
   dots_indicator: any
-
+  #spin_kit
+  flutter_spinkit: any
   #firebase
   firebase_core: any
   firebase_auth: any

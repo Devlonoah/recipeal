@@ -14,10 +14,11 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-            child: BlocProvider(
-                create: (context) => getIt<SearchBloc>(),
-                child: SearchPageBody())));
+      body: SafeArea(
+          child: BlocProvider(
+              create: (context) => getIt<SearchBloc>(),
+              child: const SearchPageBody())),
+    );
   }
 }
 
@@ -28,100 +29,22 @@ class SearchPageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SearchBar(),
+        const SearchBarWidget(),
         addVerticalSpace(20),
-        buildRecipeView(),
+        const RecipeViewWidget(),
       ],
     );
   }
-
-  Expanded buildRecipeView() {
-    return Expanded(
-        child: BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
-      if (state is SearchInitial) {
-        return const Center(
-          child: Text('Search Recipe'),
-        );
-      }
-
-      if (state is SearchLoaded) {
-        if (state.result.totalResults == 0) {
-          return const Center(child: Text('Empty result'));
-        }
-        ;
-        return _searchLoadedWidget(context: context, resultstate: state);
-      }
-
-      if (state is SearchFailure) {
-        return Center(
-            child: Image.asset(
-          'assets/search_icon.png',
-          fit: BoxFit.cover,
-          height: 150,
-          width: 150,
-        ));
-      }
-
-      return _searchLoadingWidget();
-      ;
-    }));
-  }
-
-  Widget _searchLoadingWidget() {
-    return const Center(child: CircularProgressIndicator());
-  }
-
-  Widget _searchLoadedWidget(
-      {required BuildContext context, required SearchLoaded resultstate}) {
-    return GridView.builder(
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        padding:
-            const EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
-        itemCount: resultstate.result.results?.length,
-        itemBuilder: (context, index) {
-          final _result = resultstate.result.results?[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, RecipeInfo.id,
-                  arguments: _result?.id);
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                    child: CachedNetworkImage(
-                  imageUrl: _result!.image!,
-                  fit: BoxFit.cover,
-                )),
-                Text(_result.title!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle2
-                        ?.copyWith(fontWeight: FontWeight.bold, height: 1.2)),
-              ],
-            ),
-          );
-        },
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.9,
-          mainAxisSpacing: kDefaultHorizontalPadding,
-          crossAxisSpacing: kDefaultHorizontalPadding,
-        ));
-  }
 }
 
-class SearchBar extends StatefulWidget {
-  const SearchBar({Key? key}) : super(key: key);
+class SearchBarWidget extends StatefulWidget {
+  const SearchBarWidget({Key? key}) : super(key: key);
 
   @override
-  State<SearchBar> createState() => _SearchBarState();
+  State<SearchBarWidget> createState() => _SearchBarWidgetState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _SearchBarWidgetState extends State<SearchBarWidget> {
   TextEditingController? textEditingController;
 
   @override
@@ -180,4 +103,89 @@ class _SearchBarState extends State<SearchBar> {
       },
     );
   }
+}
+
+class RecipeViewWidget extends StatelessWidget {
+  const RecipeViewWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
+      if (state is SearchInitial) {
+        return const Center(
+          child: Text('Search Recipe'),
+        );
+      }
+
+      if (state is SearchLoaded) {
+        if (state.result.totalResults == 0) {
+          return _emptySearchResultWidget();
+        }
+
+        return _searchLoadedWidget(context: context, resultstate: state);
+      }
+
+      if (state is SearchFailure) {
+        return Center(
+            child: Image.asset(
+          'assets/search_icon.png',
+          fit: BoxFit.cover,
+          height: 150,
+          width: 150,
+        ));
+      }
+
+      return _searchLoadingWidget();
+    }));
+  }
+}
+
+Widget _emptySearchResultWidget() {
+  return const Center(child: Text('Empty result'));
+}
+
+Widget _searchLoadedWidget(
+    {required BuildContext context, required SearchLoaded resultstate}) {
+  return GridView.builder(
+      shrinkWrap: true,
+      physics: const BouncingScrollPhysics(),
+      padding:
+          const EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
+      itemCount: resultstate.result.results?.length,
+      itemBuilder: (context, index) {
+        final _result = resultstate.result.results?[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, RecipeInfo.id, arguments: _result?.id);
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                  child: CachedNetworkImage(
+                imageUrl: _result!.image!,
+                fit: BoxFit.cover,
+              )),
+              Text(_result.title!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle2
+                      ?.copyWith(fontWeight: FontWeight.bold, height: 1.2)),
+            ],
+          ),
+        );
+      },
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.9,
+        mainAxisSpacing: kDefaultHorizontalPadding,
+        crossAxisSpacing: kDefaultHorizontalPadding,
+      ));
+}
+
+Widget _searchLoadingWidget() {
+  return const Center(child: CircularProgressIndicator());
 }

@@ -11,7 +11,7 @@ import '../recipe_info/recipe_info.dart';
 import '../welcome/welcome.dart';
 import '../../spacing.dart';
 import '../../theme/colors.dart';
-import '../../theme/dialogs.dart';
+import '../../utils/dialogs.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipeal/presentation/web_view/web_view.dart';
+import 'package:recipeal/utils/dialogs.dart';
 import 'bloc_observer.dart';
 import 'presentation/bloc/authentication/authentication_cubit.dart';
 import 'presentation/bloc/favorite/favorite_bloc.dart';
@@ -55,19 +57,7 @@ class MyApp extends StatelessWidget {
       child: BlocListener<AuthenticationCubit, AuthenticationState>(
         listener: (context, state) {
           if (state is AuthenticationFailure) {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    content: const Text('Error Signing in'),
-                    actions: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: Text('Close'),
-                      )
-                    ],
-                  );
-                });
+            showFailedAuthDialog(context);
           }
           // TODO: implement listener
         },
@@ -80,9 +70,10 @@ class MyApp extends StatelessWidget {
             RecipeInfo.id: (context) => const RecipeInfo(),
             TabManager.id: (context) => const TabManager(),
             SearchPage.id: (context) => const SearchPage(),
-            LandingPage.id: (context) => const LandingPage()
+            AppStart.id: (context) => const AppStart(),
+            WebViewPage.id: (context) => const WebViewPage()
           },
-          initialRoute: LandingPage.id,
+          initialRoute: AppStart.id,
           theme: lightTheme,
         ),
       ),

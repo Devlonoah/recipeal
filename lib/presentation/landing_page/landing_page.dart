@@ -5,9 +5,9 @@ import '../bloc/user/user_cubit.dart';
 import '../tab_manager/tab_manager.dart';
 import '../welcome/welcome.dart';
 
-class LandingPage extends StatelessWidget {
+class AppStart extends StatelessWidget {
   static String id = "LandingPage";
-  const LandingPage({Key? key}) : super(key: key);
+  const AppStart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

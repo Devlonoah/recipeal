@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipeal/presentation/bloc/user/user_cubit.dart';
 import '../../../constants/size.dart';
 import '../../bloc/favorite/favorite_bloc.dart';
 import '../../bloc/recipe_details/recipe_details_bloc.dart';
@@ -17,6 +18,8 @@ class RecipeInfoAppBAr extends StatelessWidget {
             (context.read<RecipeDetailsBloc>().state as RecipeDetailsLoaded);
 
         final favoriteRecipes = (context.read<FavoriteBloc>().state);
+
+        final userState = context.read<UserCubit>().state;
 
         final isAddedToFavorite = favoriteRecipes.recipes
             .any((element) => element.id == recipeDetails.recipesModel.id);
@@ -41,8 +44,28 @@ class RecipeInfoAppBAr extends StatelessWidget {
                         : IconButton(
                             tooltip: 'add to favourite',
                             onPressed: () async {
-                              context.read<FavoriteBloc>().add(
-                                  FavouriteAdded(recipeDetails.recipesModel));
+                              if (userState is UserLoaded) {
+                                context.read<FavoriteBloc>().add(
+                                    FavouriteAdded(recipeDetails.recipesModel));
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Not Signed in'),
+                                      content: const Text(
+                                          'Sign in to add recipe to favorites'),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Close'))
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
                             },
                             icon: const Icon(Icons.favorite_border_outlined),
                           )

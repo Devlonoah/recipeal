@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipeal/presentation/web_view/web_view.dart';
 import '../../core/di/injection.dart';
 import '../../domain/usecases/get_recipe_details.dart';
 import '../../domain/usecases/get_recipe_instruction.dart';
@@ -99,6 +100,8 @@ class RecipeInfoMainView extends StatelessWidget {
     return BlocBuilder<RecipeDetailsBloc, RecipeDetailsState>(
         builder: (context, state) {
       if (state is RecipeDetailsLoaded) {
+        print(
+            "analyzed instruction: ${state.recipesModel.analyzedInstructions}");
         return _buildLoadedWidget(context, state);
       }
 
@@ -123,6 +126,15 @@ Widget _buildLoadedWidget(BuildContext context, RecipeDetailsLoaded state) {
         _buildTitileAndDishType(state: state, context: context),
         addVerticalSpace(10),
         _buildRecipeImage(size: size, state: state),
+        addVerticalSpace(10),
+        ReusableButton(
+          color: kkPink,
+          label: 'View Instruction',
+          onTap: () {
+            _navigateToWebView(
+                context, state.recipesModel.spoonacularSourceUrl);
+          },
+        ),
         addVerticalSpace(15),
         const IngredientSection(),
         addVerticalSpace(10),
@@ -142,6 +154,10 @@ Widget _buildLoadedWidget(BuildContext context, RecipeDetailsLoaded state) {
       ],
     ),
   );
+}
+
+void _navigateToWebView(BuildContext context, String data) {
+  Navigator.pushNamed(context, WebViewPage.id, arguments: data);
 }
 
 _buildTitileAndDishType(
@@ -223,7 +239,7 @@ Widget buildDishType(RecipeDetailsLoaded state) {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               decoration: BoxDecoration(
-                  color: Colors.pink, borderRadius: BorderRadius.circular(5.0)),
+                  color: kkPink, borderRadius: BorderRadius.circular(5.0)),
               child: Center(
                 child: Text(
                   _dish,
